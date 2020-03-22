@@ -1,25 +1,36 @@
-/* Š„‚è‚İŠÖŒW */
-
 #include "bootpack.h"
 
+// #define PIC0_ICW1		0x0020
+// #define PIC0_OCW2		0x0020
+// #define PIC0_IMR		0x0021
+// #define PIC0_ICW2		0x0021
+// #define PIC0_ICW3		0x0021
+// #define PIC0_ICW4		0x0021
+// #define PIC1_ICW1		0x00a0
+// #define PIC1_OCW2		0x00a0
+// #define PIC1_IMR		0x00a1
+// #define PIC1_ICW2		0x00a1
+// #define PIC1_ICW3		0x00a1
+// #define PIC1_ICW4		0x00a1
+
 void init_pic(void)
-/* PIC‚Ì‰Šú‰» */
+/* PICåˆå§‹åŒ– */
 {
-	io_out8(PIC0_IMR,  0xff  ); /* ‘S‚Ä‚ÌŠ„‚è‚İ‚ğó‚¯•t‚¯‚È‚¢ */
-	io_out8(PIC1_IMR,  0xff  ); /* ‘S‚Ä‚ÌŠ„‚è‚İ‚ğó‚¯•t‚¯‚È‚¢ */
+	io_out8(PIC0_IMR,  0xff  ); /* ç¦æ­¢æ‰€æœ‰ä¸­æ–­ */
+	io_out8(PIC1_IMR,  0xff  ); /* ç¦æ­¢æ‰€æœ‰ä¸­æ–­ */
 
-	io_out8(PIC0_ICW1, 0x11  ); /* ƒGƒbƒWƒgƒŠƒKƒ‚[ƒh */
-	io_out8(PIC0_ICW2, 0x20  ); /* IRQ0-7‚ÍAINT20-27‚Åó‚¯‚é */
-	io_out8(PIC0_ICW3, 1 << 2); /* PIC1‚ÍIRQ2‚É‚ÄÚ‘± */
-	io_out8(PIC0_ICW4, 0x01  ); /* ƒmƒ“ƒoƒbƒtƒ@ƒ‚[ƒh */
+	io_out8(PIC0_ICW1, 0x11  ); /* è¾¹æ²¿è§¦å‘æ¨¡å¼ */
+	io_out8(PIC0_ICW2, 0x20  ); /* äº§ç”Ÿä¸­æ–­æ—¶å€™çš„ä¸­æ–­å·åŸºå€¼ï¼ŒIRQ0-7 ç”± INT20-27 æ¥æ”¶ï¼Œ æ¯”å¦‚äº§ç”Ÿäº†ä¸­æ–­IRQ-0ï¼Œ å°±ä¼šäº§ç”ŸINT 0x20 ä¸­æ–­ä¿¡å· */
+	io_out8(PIC0_ICW3, 1 << 2); /* PIC1 ç”± IRQ2 è¿æ¥ */
+	io_out8(PIC0_ICW4, 0x01  ); /* æ— ç¼“å†²åŒºæ¨¡å¼ */
 
-	io_out8(PIC1_ICW1, 0x11  ); /* ƒGƒbƒWƒgƒŠƒKƒ‚[ƒh */
-	io_out8(PIC1_ICW2, 0x28  ); /* IRQ8-15‚ÍAINT28-2f‚Åó‚¯‚é */
-	io_out8(PIC1_ICW3, 2     ); /* PIC1‚ÍIRQ2‚É‚ÄÚ‘± */
-	io_out8(PIC1_ICW4, 0x01  ); /* ƒmƒ“ƒoƒbƒtƒ@ƒ‚[ƒh */
+	io_out8(PIC1_ICW1, 0x11  ); /* è¾¹æ²¿è§¦å‘æ¨¡å¼ */
+	io_out8(PIC1_ICW2, 0x28  ); /* IRQ8-15 ç”± INT28-2f æ¥æ”¶ */
+	io_out8(PIC1_ICW3, 2     ); /* PIC1 ç”± IRQ2 è¿æ¥ */
+	io_out8(PIC1_ICW4, 0x01  ); /* æ— ç¼“å†²åŒºæ¨¡å¼ */
 
-	io_out8(PIC0_IMR,  0xfb  ); /* 11111011 PIC1ˆÈŠO‚Í‘S‚Ä‹Ö~ */
-	io_out8(PIC1_IMR,  0xff  ); /* 11111111 ‘S‚Ä‚ÌŠ„‚è‚İ‚ğó‚¯•t‚¯‚È‚¢ */
+	io_out8(PIC0_IMR,  0xfb  ); /* 11111011 PIC1ä»¥å¤–å…¨éƒ¨ç¦æ­¢ */
+	io_out8(PIC1_IMR,  0xff  ); /* 11111111 ç¦æ­¢æ‰€æœ‰ä¸­æ–­ */
 
 	return;
 }

@@ -1,8 +1,8 @@
 OBJS_BOOTPACK = bootpack.obj naskfunc.obj hankaku.obj graphic.obj dsctbl.obj \
 		int.obj
 
-TOOLPATH = ../z_tools/
-INCPATH  = ../z_tools/haribote/
+TOOLPATH = ../../z_tools/
+INCPATH  = ../../z_tools/haribote/
 
 MAKE     = $(TOOLPATH)make.exe -r
 NASK     = $(TOOLPATH)nask.exe
@@ -18,12 +18,12 @@ IMGTOL   = $(TOOLPATH)imgtol.com
 COPY     = copy
 DEL      = del
 
-# ƒfƒtƒHƒ‹ƒg“®ì
+# ï¿½fï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½
 
 default :
 	$(MAKE) img
 
-# ƒtƒ@ƒCƒ‹¶¬‹K‘¥
+# ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Kï¿½ï¿½
 
 ipl10.bin : ipl10.nas Makefile
 	$(NASK) ipl10.nas ipl10.bin ipl10.lst
@@ -49,12 +49,12 @@ haribote.sys : asmhead.bin bootpack.hrb Makefile
 	copy /B asmhead.bin+bootpack.hrb haribote.sys
 
 haribote.img : ipl10.bin haribote.sys Makefile
-	$(EDIMG)   imgin:../z_tools/fdimg0at.tek \
+	$(EDIMG)   imgin:../../z_tools/fdimg0at.tek \
 		wbinimg src:ipl10.bin len:512 from:0 to:0 \
 		copy from:haribote.sys to:@: \
 		imgout:haribote.img
 
-# ˆê”Ê‹K‘¥
+# ï¿½ï¿½Ê‹Kï¿½ï¿½
 
 %.gas : %.c Makefile
 	$(CC1) -o $*.gas $*.c
@@ -65,15 +65,15 @@ haribote.img : ipl10.bin haribote.sys Makefile
 %.obj : %.nas Makefile
 	$(NASK) $*.nas $*.obj $*.lst
 
-# ƒRƒ}ƒ“ƒh
+# ï¿½Rï¿½}ï¿½ï¿½ï¿½h
 
 img :
 	$(MAKE) haribote.img
 
 run :
 	$(MAKE) img
-	$(COPY) haribote.img ..\z_tools\qemu\fdimage0.bin
-	$(MAKE) -C ../z_tools/qemu
+	$(COPY) haribote.img ..\..\z_tools\qemu\fdimage0.bin
+	$(MAKE) -C ../../z_tools/qemu
 
 install :
 	$(MAKE) img
