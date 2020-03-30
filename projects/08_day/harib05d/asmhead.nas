@@ -1,49 +1,49 @@
 ; haribote-os boot asm
 ; TAB=4
 
-BOTPAK	EQU		0x00280000		; bootpack‚Ìƒ[ƒhæ
-DSKCAC	EQU		0x00100000		; ƒfƒBƒXƒNƒLƒƒƒbƒVƒ…‚ÌêŠ
-DSKCAC0	EQU		0x00008000		; ƒfƒBƒXƒNƒLƒƒƒbƒVƒ…‚ÌêŠiƒŠƒAƒ‹ƒ‚[ƒhj
+BOTPAK	EQU		0x00280000		; bootpack.hrbä»£ç æ®µ
+DSKCAC	EQU		0x00100000		; å¯åŠ¨ç¨‹åº
+DSKCAC0	EQU		0x00008000		; åœ¨IPLä¸­å°†ç£ç›˜æ•°æ®è¯»å…¥åˆ°äº†å†…å­˜0x8000ä¸­
 
-; BOOT_INFOŠÖŒW
-CYLS	EQU		0x0ff0			; ƒu[ƒgƒZƒNƒ^‚ªÝ’è‚·‚é
+; BOOT_INFOä¿¡æ¯
+CYLS	EQU		0x0ff0			; æŸ±é¢
 LEDS	EQU		0x0ff1
-VMODE	EQU		0x0ff2			; F”‚ÉŠÖ‚·‚éî•ñB‰½ƒrƒbƒgƒJƒ‰[‚©H
-SCRNX	EQU		0x0ff4			; ‰ð‘œ“x‚ÌX
-SCRNY	EQU		0x0ff6			; ‰ð‘œ“x‚ÌY
-VRAM	EQU		0x0ff8			; ƒOƒ‰ƒtƒBƒbƒNƒoƒbƒtƒ@‚ÌŠJŽn”Ô’n
+VMODE	EQU		0x0ff2			; æ˜¾åƒæ¨¡å¼
+SCRNX	EQU		0x0ff4			; åˆ†è¾¨çŽ‡X
+SCRNY	EQU		0x0ff6			; åˆ†è¾¨çŽ‡Y
+VRAM	EQU		0x0ff8			; VRAMçš„å¼€å§‹ä½ç½®
 
-		ORG		0xc200			; ‚±‚ÌƒvƒƒOƒ‰ƒ€‚ª‚Ç‚±‚É“Ç‚Ýž‚Ü‚ê‚é‚Ì‚©
+		ORG		0xc200			; ç¨‹åºè£…è½½ä½ç½®
 
-; ‰æ–Êƒ‚[ƒh‚ðÝ’è
+; åˆå§‹åŒ– æ˜¾åƒæ¨¡å¼
 
-		MOV		AL,0x13			; VGAƒOƒ‰ƒtƒBƒbƒNƒXA320x200x8bitƒJƒ‰[
+		MOV		AL,0x13			; ä¸­æ–­åˆ°ï¼ŒVGAæ¨¡å¼
 		MOV		AH,0x00
 		INT		0x10
-		MOV		BYTE [VMODE],8	; ‰æ–Êƒ‚[ƒh‚ðƒƒ‚‚·‚éiCŒ¾Œê‚ªŽQÆ‚·‚éj
+		MOV		BYTE [VMODE],8	; æ˜¾åƒæ¨¡å¼ä¸º8ä½å½©è‰²
 		MOV		WORD [SCRNX],320
 		MOV		WORD [SCRNY],200
 		MOV		DWORD [VRAM],0x000a0000
 
-; ƒL[ƒ{[ƒh‚ÌLEDó‘Ô‚ðBIOS‚É‹³‚¦‚Ä‚à‚ç‚¤
+; å­˜æ”¾LEDSå€¼
 
 		MOV		AH,0x02
 		INT		0x16 			; keyboard BIOS
 		MOV		[LEDS],AL
 
-; PIC‚ªˆêØ‚ÌŠ„‚èž‚Ý‚ðŽó‚¯•t‚¯‚È‚¢‚æ‚¤‚É‚·‚é
-;	ATŒÝŠ·‹@‚ÌŽd—l‚Å‚ÍAPIC‚Ì‰Šú‰»‚ð‚·‚é‚È‚çA
-;	‚±‚¢‚Â‚ðCLI‘O‚É‚â‚Á‚Ä‚¨‚©‚È‚¢‚ÆA‚½‚Ü‚Éƒnƒ“ƒOƒAƒbƒv‚·‚é
-;	PIC‚Ì‰Šú‰»‚Í‚ ‚Æ‚Å‚â‚é
+; PICå…³é—­ä¸€åˆ‡ä¸­æ–­
+;	æ ¹æ®ATå…¼å®¹æœºçš„è§„æ ¼ï¼Œå¦‚æžœè¦åˆå§‹åŒ–PICï¼Œ
+;	å¿…é¡»åœ¨CLIä¹‹å‰è¿›è¡Œï¼Œå¦åˆ™æœ‰æ—¶ä¼šæŒ‚èµ·
+;	éšåŽè¿›è¡ŒPICçš„åˆå§‹åŒ–
 
-		MOV		AL,0xff
-		OUT		0x21,AL
-		NOP						; OUT–½—ß‚ð˜A‘±‚³‚¹‚é‚Æ‚¤‚Ü‚­‚¢‚©‚È‚¢‹@Ží‚ª‚ ‚é‚ç‚µ‚¢‚Ì‚Å
-		OUT		0xa1,AL
+		MOV		AL,0xff			
+		OUT		0x21,AL			; ç›¸å½“äºŽio_out(PIC0_IMR, 0xff) ç¦æ­¢ä¸»PICçš„å…¨éƒ¨ä¸­æ–­
+		NOP						; å¦‚æžœè¿žç»­æ‰§è¡ŒoutæŒ‡ä»¤ï¼Œæœ‰äº›æœºç§ä¼šæ— æ³•æ­£å¸¸è¿è¡Œ
+		OUT		0xa1,AL			; ç›¸å½“äºŽio_out(PIC1_IMR, 0xff) ç¦æ­¢ä»ŽPICçš„å…¨éƒ¨ä¸­æ–­
 
-		CLI						; ‚³‚ç‚ÉCPUƒŒƒxƒ‹‚Å‚àŠ„‚èž‚Ý‹ÖŽ~
+		CLI						; ç¦æ­¢CPUçº§åˆ«çš„ä¸­æ–­
 
-; CPU‚©‚ç1MBˆÈã‚Ìƒƒ‚ƒŠ‚ÉƒAƒNƒZƒX‚Å‚«‚é‚æ‚¤‚ÉAA20GATE‚ðÝ’è
+; ä¸ºäº†è®©CPUèƒ½è®¿é—®1MBä»¥ä¸Šçš„ç©ºé—´ï¼Œè®¾å®šA20GATEï¼ŒåŽ†å²èƒŒæ™¯https://blog.csdn.net/lightseed/article/details/4305865
 
 		CALL	waitkbdout
 		MOV		AL,0xd1
@@ -53,72 +53,72 @@ VRAM	EQU		0x0ff8			; ƒOƒ‰ƒtƒBƒbƒNƒoƒbƒtƒ@‚ÌŠJŽn”Ô’n
 		OUT		0x60,AL
 		CALL	waitkbdout
 
-; ƒvƒƒeƒNƒgƒ‚[ƒhˆÚs
+; åˆ‡æ¢åˆ°ä¿æŠ¤æ¨¡å¼ å‚è€ƒèµ„æ–™https://blog.csdn.net/epluguo/article/details/9260429
 
-[INSTRSET "i486p"]				; 486‚Ì–½—ß‚Ü‚ÅŽg‚¢‚½‚¢‚Æ‚¢‚¤‹Lq
+[INSTRSET "i486p"]				; æ“ä½œç³»ç»Ÿè¿è¡Œåœ¨æœ€ä½Žæ”¯æŒ486æŒ‡ä»¤çš„CPUä¸Š
 
-		LGDT	[GDTR0]			; Žb’èGDT‚ðÝ’è
+		LGDT	[GDTR0]			; è®¾å®šä¸´æ—¶GDT
 		MOV		EAX,CR0
-		AND		EAX,0x7fffffff	; bit31‚ð0‚É‚·‚éiƒy[ƒWƒ“ƒO‹ÖŽ~‚Ì‚½‚ßj
-		OR		EAX,0x00000001	; bit0‚ð1‚É‚·‚éiƒvƒƒeƒNƒgƒ‚[ƒhˆÚs‚Ì‚½‚ßj
+		AND		EAX,0x7fffffff	; è®¾ç½®bit31ä¸º0ï¼ˆè¿›åˆ¶åˆ†é¡µ Paging Enable (PG) Bit. Bit 31. è¯¥ä½æŽ§åˆ¶åˆ†é¡µæœºåˆ¶ï¼ŒPG=1ï¼Œå¯åŠ¨åˆ†é¡µæœºåˆ¶ï¼›PG=0,ä¸ä½¿ç”¨åˆ†é¡µæœºåˆ¶ã€‚
+		OR		EAX,0x00000001	; è®¾ç½®bit0ä¸º1ï¼ˆåˆ‡æ¢åˆ°ä¿æŠ¤æ¨¡å¼ Protected-Mode Enable (PE) Bit. Bit0. PE=0,è¡¨ç¤ºCPUå¤„äºŽå®žæ¨¡å¼; PE=1è¡¨CPUå¤„äºŽä¿æŠ¤æ¨¡å¼ï¼Œå¹¶ä½¿ç”¨åˆ†æ®µæœºåˆ¶ã€‚
 		MOV		CR0,EAX
 		JMP		pipelineflush
 pipelineflush:
-		MOV		AX,1*8			;  “Ç‚Ý‘‚«‰Â”\ƒZƒOƒƒ“ƒg32bit
+		MOV		AX,1*8			; å¯è¯»å†™çš„æ®µ 32bit
 		MOV		DS,AX
 		MOV		ES,AX
 		MOV		FS,AX
 		MOV		GS,AX
 		MOV		SS,AX
 
-; bootpack‚Ì“]‘—
+; bootpackçš„ä¼ é€
 
-		MOV		ESI,bootpack	; “]‘—Œ³
-		MOV		EDI,BOTPAK		; “]‘—æ
+		MOV		ESI,bootpack	; è½¬é€æº
+		MOV		EDI,BOTPAK		; è½¬é€ç›®çš„åœ°
 		MOV		ECX,512*1024/4
 		CALL	memcpy
 
-; ‚Â‚¢‚Å‚ÉƒfƒBƒXƒNƒf[ƒ^‚à–{—ˆ‚ÌˆÊ’u‚Ö“]‘—
+; ç£ç›˜æ•°æ®æœ€ç»ˆè½¬é€åˆ°ä»–åŽŸæœ¬çš„ä½ç½®åŽ»
 
-; ‚Ü‚¸‚Íƒu[ƒgƒZƒNƒ^‚©‚ç
+; é¦–å…ˆä»Žå¯åŠ¨æ‰‡åŒºå¼€å§‹
 
-		MOV		ESI,0x7c00		; “]‘—Œ³
-		MOV		EDI,DSKCAC		; “]‘—æ
+		MOV		ESI,0x7c00		; è½¬é€æº
+		MOV		EDI,DSKCAC		; è½¬é€ç›®çš„åœ°
 		MOV		ECX,512/4
 		CALL	memcpy
 
-; Žc‚è‘S•”
+; æ‰€æœ‰å‰©ä¸‹çš„
 
-		MOV		ESI,DSKCAC0+512	; “]‘—Œ³
-		MOV		EDI,DSKCAC+512	; “]‘—æ
+		MOV		ESI,DSKCAC0+512	; è½¬é€æº
+		MOV		EDI,DSKCAC+512	; è½¬é€ç›®çš„åœ°
 		MOV		ECX,0
 		MOV		CL,BYTE [CYLS]
-		IMUL	ECX,512*18*2/4	; ƒVƒŠƒ“ƒ_”‚©‚çƒoƒCƒg”/4‚É•ÏŠ·
-		SUB		ECX,512/4		; IPL‚Ì•ª‚¾‚¯·‚µˆø‚­
+		IMUL	ECX,512*18*2/4	; ä»ŽæŸ±é¢æ•°å˜æ¢æˆå­—èŠ‚æ•°/4
+		SUB		ECX,512/4		; å‡åŽ»IPL
 		CALL	memcpy
 
-; asmhead‚Å‚µ‚È‚¯‚ê‚Î‚¢‚¯‚È‚¢‚±‚Æ‚Í‘S•”‚µI‚í‚Á‚½‚Ì‚ÅA
-;	‚ ‚Æ‚Íbootpack‚É”C‚¹‚é
+; å®‰æŽ’å¥½å†…å­˜å¸ƒå±€åŽï¼Œå¯åŠ¨bootpackæ¥è¿›è¡Œæ“ä½œç³»ç»Ÿçš„åˆå§‹åŒ–
 
-; bootpack‚Ì‹N“®
+; bootpackçš„å¯åŠ¨
 
 		MOV		EBX,BOTPAK
 		MOV		ECX,[EBX+16]
 		ADD		ECX,3			; ECX += 3;
 		SHR		ECX,2			; ECX /= 4;
-		JZ		skip			; “]‘—‚·‚é‚×‚«‚à‚Ì‚ª‚È‚¢
-		MOV		ESI,[EBX+20]	; “]‘—Œ³
+		JZ		skip			; æ²¡æœ‰è¦è½¬é€çš„ä¸œè¥¿
+		MOV		ESI,[EBX+20]	; è½¬é€æº
 		ADD		ESI,EBX
-		MOV		EDI,[EBX+12]	; “]‘—æ
+		MOV		EDI,[EBX+12]	; è½¬é€ç›®çš„åœ°
 		CALL	memcpy
 skip:
-		MOV		ESP,[EBX+12]	; ƒXƒ^ƒbƒN‰Šú’l
+		MOV		ESP,[EBX+12]	; æ ˆåˆå§‹å€¼
 		JMP		DWORD 2*8:0x0000001b
 
 waitkbdout:
 		IN		 AL,0x64
 		AND		 AL,0x02
-		JNZ		waitkbdout		; AND‚ÌŒ‹‰Ê‚ª0‚Å‚È‚¯‚ê‚Îwaitkbdout‚Ö
+		IN		AL,0x60			; ç©ºè¯»ï¼Œä¸ºäº†æ¸…ç©ºæ•°æ®æŽ¥æ”¶ç¼“å†²åŒºå†…çš„åžƒåœ¾æ•°æ®
+		JNZ		waitkbdout		; ANDçš„ç»“æžœå¦‚æžœä¸æ˜¯0ï¼Œå°±è·³åˆ°waitkbdout
 		RET
 
 memcpy:
@@ -127,15 +127,14 @@ memcpy:
 		MOV		[EDI],EAX
 		ADD		EDI,4
 		SUB		ECX,1
-		JNZ		memcpy			; ˆø‚«ŽZ‚µ‚½Œ‹‰Ê‚ª0‚Å‚È‚¯‚ê‚Îmemcpy‚Ö
+		JNZ		memcpy			; å‡æ³•è¿ç®—çš„ç»“æžœå¦‚æžœä¸æ˜¯0ï¼Œå°±è·³åˆ°memcpyç¨‹åº
 		RET
-; memcpy‚ÍƒAƒhƒŒƒXƒTƒCƒYƒvƒŠƒtƒBƒNƒX‚ð“ü‚ê–Y‚ê‚È‚¯‚ê‚ÎAƒXƒgƒŠƒ“ƒO–½—ß‚Å‚à‘‚¯‚é
 
-		ALIGNB	16
+		ALIGNB	16				; ä¸€ç›´æ·»åŠ DBOï¼Œç›´åˆ°æ—¶æœºåˆé€‚ä¸ºæ­¢ï¼ˆåœ°å€èƒ½è¢«16æ•´é™¤ï¼‰
 GDT0:
-		RESB	8				; ƒkƒ‹ƒZƒŒƒNƒ^
-		DW		0xffff,0x0000,0x9200,0x00cf	; “Ç‚Ý‘‚«‰Â”\ƒZƒOƒƒ“ƒg32bit
-		DW		0xffff,0x0000,0x9a28,0x0047	; ŽÀs‰Â”\ƒZƒOƒƒ“ƒg32bitibootpack—pj
+		RESB	8				; NULL Selector
+		DW		0xffff,0x0000,0x9200,0x00cf	; å¯ä»¥è¯»å†™çš„æ®µ 32bit
+		DW		0xffff,0x0000,0x9a28,0x0047	; å¯ä»¥æ‰§è¡Œçš„æ®µ 32bitï¼ˆbootpackç”¨ï¼‰
 
 		DW		0
 GDTR0:
